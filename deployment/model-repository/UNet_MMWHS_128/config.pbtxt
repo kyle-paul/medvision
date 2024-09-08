@@ -1,0 +1,57 @@
+name: "UNet_MMWHS_128"
+backend: "onnxruntime"
+
+dynamic_batching { }
+
+input [
+    {
+        name: "input"
+        data_type: TYPE_FP32
+        format: FORMAT_NCHW
+        dims: [ 1, 128, 128 ]
+        reshape { shape: [ 1, 1, 128, 128 ] }
+    }
+]
+
+output [
+    {
+        name: "output"
+        data_type: TYPE_FP32
+        dims: [ 8, 128, 128 ]
+        reshape { shape: [ 1, 8, 128, 128 ] }
+    }
+]
+
+
+instance_group [
+  {
+    kind: KIND_GPU
+  }
+]
+
+
+optimization {
+    execution_accelerators {
+        gpu_execution_accelerator: [
+            {
+                name: "tensorrt"
+                parameters {
+                    key: "precision_mode"
+                    value: "FP16"
+                }
+                parameters {
+                    key: "max_workspace_size_bytes"
+                    value: "4294967296"
+                }
+                parameters {
+                    key: "trt_engine_cache_enable"
+                    value: "true"
+                }
+                parameters {
+                    key: "trt_engine_cache_path"
+                    value: "/models/UNet_MMWHS_128/1"
+                }
+            }
+        ]
+    }
+}

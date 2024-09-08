@@ -1,0 +1,26 @@
+network: UNet_plusplus
+pretrained: False
+epochs: 600
+batch_size: 24
+seed: 1234
+n_gpu: 1
+num_workers: 1
+val_mode: True
+num_classes: 8
+img_size: 128
+dataset: MMWHS
+ext: .npy
+range: 1000
+loss: Dice IOU
+optimizer: SGD
+base_lr: 0.01
+min_lr: 0.00001
+momentum: 0.9
+weight_decay: 0.0001
+nesterov: False
+scheduler: CosineAnnealingLR
+factor: 0.1
+patience: 3
+gamma: 2/3
+early_stopping: -1
+grad_acc: 1
